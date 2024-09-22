@@ -22,18 +22,21 @@ public class EmployeeController {
     private EmployeeService employeeService;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
+    // GET: Return employees with "active" property set to true
     @GetMapping("/active")
     public ResponseEntity<List<Employee>> getActiveEmployees() {
         List<Employee> activeEmployees = employeeService.getActiveEmployees();
         return new ResponseEntity<>(activeEmployees, HttpStatus.OK);
     }
 
+    // GET: Return employees and the names of their direct hires
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDirectHiresDTO> getEmployeeAndDirectHires(@PathVariable int id) {
         EmployeeDirectHiresDTO employee = employeeService.getEmployeeWithHires(id);
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
+    // GET: Return employees within a specified date range
     @GetMapping("/hired")
     public ResponseEntity<List<Employee>> getEmployeesHiredInRange(@RequestParam String startDate, @RequestParam String endDate) {
         try {
@@ -46,6 +49,7 @@ public class EmployeeController {
         }
     }
 
+    // POST: Create new employee
     @PostMapping()
     public ResponseEntity<String> createEmployee(@RequestBody EmployeeCreationDTO employee) {
         try {
@@ -58,6 +62,7 @@ public class EmployeeController {
         }
     }
 
+    // DELETE: Set employee "active" flag to false
     @DeleteMapping("/deactivate/{id}")
     public ResponseEntity<String> deactivateEmployee(@PathVariable int id) {
         try {

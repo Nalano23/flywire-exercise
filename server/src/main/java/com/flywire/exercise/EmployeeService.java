@@ -35,7 +35,7 @@ public class EmployeeService {
         }
     }
 
-    // Create a http request endpoint that returns a list of all active employees in alphabetical order of last name.
+    // Returns a list of all active employees in alphabetical order of last name.
     public List<Employee> getActiveEmployees() {
         return employees.stream().filter(Employee::isActive)
                 .sorted(Comparator.comparing(e -> splitLastName(e.getName())))
@@ -46,8 +46,7 @@ public class EmployeeService {
         return split[split.length - 1];
     }
 
-    // Create a http request endpoint that takes in an ID and returns a JSON response of the matching employees,
-    // as well as the names of their direct hires. Employee IDs are unique.
+    // Returns employee details with specified id, as well as the names of their direct hires.
     public EmployeeDirectHiresDTO getEmployeeWithHires(int id) {
         Employee selectedEmployee = this.getEmployeeById(id);
         if (selectedEmployee == null) {
@@ -59,6 +58,7 @@ public class EmployeeService {
                 .collect(Collectors.toList());
         return new EmployeeDirectHiresDTO(selectedEmployee, directHireNames);
     }
+    // Helper function for getEmployeeWithHires(int id)
     private String getEmployeeName(int id) {
         return employees.stream()
                 .filter(e -> e.getId() == id)
@@ -66,6 +66,7 @@ public class EmployeeService {
                 .findFirst()
                 .orElse(null);
     }
+    // Helper function for getEmployeeWithHires(int id)
     private Employee getEmployeeById(int id) {
         return employees.stream()
                 .filter(e -> e.getId() == id)
@@ -73,7 +74,7 @@ public class EmployeeService {
                 .orElse(null);
     }
 
-    // Create a http request endpoint that takes a date range, and returns a JSON response of all employees hired in that date range.
+    // Return list of employees hired in specified range.
     // Sort by descending order of date hired.
     public List<Employee> getEmployeesHiredInRange(Date start, Date end) {
         return employees.stream()
@@ -82,8 +83,7 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    // Create a http request endpoint that takes a name, id, position, direct reports, and manager to creates a new employee.
-    // The employee should be added to the JSON file. Add any validation and error handling you see fit.
+    // Create new Employee
     public boolean createEmployee(EmployeeCreationDTO e) throws IOException {
         Employee newEmployee = new Employee();
         newEmployee.setId(e.getId());
@@ -113,7 +113,7 @@ public class EmployeeService {
         return true;
     }
 
-    // Create an http request endpoint that takes in an ID and deactivates an employee. Add any validation you see fit.
+    // Deactivate employee by setting Employee "active" property to false
     public boolean deactivateEmployee(int id) throws IOException {
         Optional<Employee> employeeOpt = employees.stream()
                 .filter(e -> e.getId() == id)
